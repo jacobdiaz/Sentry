@@ -1,6 +1,7 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import * as faceapi from "face-api.js";
 
 export default class VideoSection extends Component {
   constructor(props) {
@@ -35,9 +36,20 @@ export default class VideoSection extends Component {
     let localStream = null;
     let remoteStream = null;
 
+    Promise.all([
+      // Facial Recognition
+      faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      faceapi.nets.faceExpressionNet.loadFromUri("/models"),
+      faceapi.nets.ageGenderNet.loadFromUri("/models"),
+    ]).then(console.log("Loaded faceapi"));
+
     // Starting the local webcam
     let handleWebcamButton = async () => {
-      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false }, (err) => {
+        console.log(err);
+      });
       remoteStream = new MediaStream();
 
       // Push tracks from local stream to peer connection
@@ -55,7 +67,15 @@ export default class VideoSection extends Component {
       //set webcamVideo src on html to localStream
       this.webcamSrc.srcObject = localStream;
       this.remoteSrc.srcObject = remoteStream;
-      console.log(remoteStream);
+
+      setInterval(async () => {
+        const detections = await faceapi
+          .detectAllFaces(this.webcamSrc, new faceapi.TinyFaceDetectorOptions())
+          .withFaceLandmarks()
+          .withFaceExpressions().withAgeAndGender();
+
+        detections.length !== 0 ? console.log(detections) : console.log("No face detected");
+      }, 1000);
     };
 
     // Create a new offer
@@ -151,6 +171,8 @@ export default class VideoSection extends Component {
         <span>
           <h3>Local</h3>
           <video
+            width="620"
+            height="440"
             ref={(webcamSrc) => {
               this.webcamSrc = webcamSrc;
             }}
