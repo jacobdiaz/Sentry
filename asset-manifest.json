@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/WatchMyComputer/static/css/main.e514e6be.chunk.css",
+    "main.js": "/WatchMyComputer/static/js/main.4fd80c43.chunk.js",
+    "main.js.map": "/WatchMyComputer/static/js/main.4fd80c43.chunk.js.map",
+    "runtime-main.js": "/WatchMyComputer/static/js/runtime-main.577257e5.js",
+    "runtime-main.js.map": "/WatchMyComputer/static/js/runtime-main.577257e5.js.map",
+    "static/js/2.c560e28d.chunk.js": "/WatchMyComputer/static/js/2.c560e28d.chunk.js",
+    "static/js/2.c560e28d.chunk.js.map": "/WatchMyComputer/static/js/2.c560e28d.chunk.js.map",
+    "static/js/3.34727d86.chunk.js": "/WatchMyComputer/static/js/3.34727d86.chunk.js",
+    "static/js/3.34727d86.chunk.js.map": "/WatchMyComputer/static/js/3.34727d86.chunk.js.map",
+    "index.html": "/WatchMyComputer/index.html",
+    "static/css/main.e514e6be.chunk.css.map": "/WatchMyComputer/static/css/main.e514e6be.chunk.css.map",
+    "static/js/2.c560e28d.chunk.js.LICENSE.txt": "/WatchMyComputer/static/js/2.c560e28d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.577257e5.js",
+    "static/js/2.c560e28d.chunk.js",
+    "static/css/main.e514e6be.chunk.css",
+    "static/js/main.4fd80c43.chunk.js"
+  ]
+}
