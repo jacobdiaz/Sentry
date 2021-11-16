@@ -6,21 +6,9 @@ import * as faceapi from "face-api.js";
 export default class VideoSection extends Component {
   constructor(props) {
     super(props);
-    this.canvasRef = React.createRef();
     this.state = {
       input: "",
-      canvas: [],
     };
-  }
-
-  createCanvas() {
-    console.log("Create Canvas");
-    this.setState({
-      canvas: <canvas id="canvas" width="640" height="480" ref={this.canvasRef}></canvas>,
-    });
-  }
-  componentDidMount() {
-    this.createCanvas();
   }
 
   updateInputValue(evt) {
@@ -80,29 +68,14 @@ export default class VideoSection extends Component {
       this.webcamSrc.srcObject = localStream;
       this.remoteSrc.srcObject = remoteStream;
 
-      // todo change weidth height to be dynamic
-      const displaySize = { width: 640, height: 480 };
-      //   faceapi.matchDimensions(this.state.canvas, displaySize);
-
       setInterval(async () => {
         const detections = await faceapi
           .detectAllFaces(this.webcamSrc, new faceapi.TinyFaceDetectorOptions())
           .withFaceLandmarks()
-          .withFaceExpressions()
-          .withAgeAndGender();
-        const resizedDetections = faceapi.resizeResults(detections, displaySize);
-        this.canvasRef.current.getContext("2d").clearRect(0, 0, 640, 480);
-        faceapi.draw.drawDetections(this.canvasRef.current, resizedDetections);
-        faceapi.draw.drawFaceLandmarks(this.canvasRef.current, resizedDetections);
-        faceapi.draw.drawFaceExpressions(this.canvasRef.current, resizedDetections);
-        resizedDetections.forEach((detection) => {
-          const box = detection.detection.box;
-          const drawBox = new faceapi.draw.DrawBox(box, { label: Math.round(detection.age) + " year old " + detection.gender });
-          drawBox.draw(this.canvasRef.current);
-        });
+          .withFaceExpressions().withAgeAndGender();
 
         detections.length !== 0 ? console.log(detections) : console.log("No face detected");
-      }, 150);
+      }, 1000);
     };
 
     // Create a new offer
@@ -197,10 +170,9 @@ export default class VideoSection extends Component {
         <h1>Web RTC Demo</h1>
         <span>
           <h3>Local</h3>
-          {this.state.canvas}
           <video
-            width="640"
-            height="480"
+            width="620"
+            height="440"
             ref={(webcamSrc) => {
               this.webcamSrc = webcamSrc;
             }}
@@ -210,7 +182,6 @@ export default class VideoSection extends Component {
         </span>
         <span>
           <h3>Remote</h3>
-
           <video
             ref={(remoteSrc) => {
               this.remoteSrc = remoteSrc;
